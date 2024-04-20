@@ -9,7 +9,6 @@ using namespace std;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-
 // Allocate console if debugging
 #if _DEBUG
     AllocConsole();
@@ -29,7 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // When debugging there's an additional first argument with the startup directory
 #if _DEBUG
     if (argv[1] == NULL) {
-    cout << "[Updater] Auto-update failed " << "(Null argument 0)";
+    cout << "[Updater] Auto-update failed " << "(NULL path)";
     Sleep(5000);
     return 1;
     }
@@ -38,25 +37,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     string path = auxArg;
 
     if (argv[2] == NULL) {
-        cout << "[Updater] Auto-update failed " << "(Null argument 1)";
+        cout << "[Updater] Auto-update failed " << "(NULL sessionID)";
         Sleep(5000);
         return 1;
     }
 
     wcstombs(auxArg, argv[2], bufferSize);
-    string sessionKey = auxArg;
+    string sessionID = auxArg;
 
     if (argv[3] == NULL) {
-        cout << "[Updater] Auto-update failed " << "(Null argument 2)";
+        cout << "[Updater] Auto-update failed " << "(NULL build)";
         Sleep(5000);
         return 1;
     }
 
     wcstombs(auxArg, argv[3], bufferSize);
-    bool beta = stoi(auxArg);
+    int build = stoi(auxArg);
 #else
     if (argv[0] == NULL) {
-        cout << "[Updater] Auto-update failed " << "(Null argument 0)";
+        cout << "[Updater] Auto-update failed " << "(NULL path)";
         Sleep(5000);
         return 1;
 }
@@ -65,7 +64,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     string path = auxArg;
 
     if (argv[1] == NULL) {
-        cout << "[Updater] Auto-update failed " << "(Null argument 1)";
+        cout << "[Updater] Auto-update failed " << "(NULL sessionID)";
         Sleep(5000);
         return 1;
     }
@@ -74,24 +73,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     string sessionKey = auxArg;
 
     if (argv[2] == NULL) {
-        cout << "[Updater] Auto-update failed " << "(Null argument 2)";
+        cout << "[Updater] Auto-update failed " << "(NULL build)";
         Sleep(5000);
         return 1;
     }
 
     wcstombs(auxArg, argv[2], bufferSize);
-    bool beta = stoi(auxArg);
+    bool build = stoi(auxArg);
 #endif
 
     delete[] auxArg;
 
     // Here we build the url
     string url = "https://site.com/download.php";
-    url = url + "sessionID=" + sessionKey + "&buid=" + to_string(beta);
+    url = url + "sessionID=" + sessionID + "&build=" + to_string(build);
 
 #if _DEBUG
     cout << "[Updater] Final URL ->" << url << endl;
-    cout << "[Updater] Received params ->" << " Path:" << path << " SessionID:" << sessionKey << " Build:" << beta << endl;
+    cout << "[Updater] Received params ->" << " Path:" << path << " SessionID:" << sessionID << " Build:" << build << endl;
     Sleep(3000);
 #endif
 
